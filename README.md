@@ -74,20 +74,18 @@ The same text appears in the app under **About**.
 
 ## Download (end users)
 
-1. Open **[Releases](https://github.com/Aryanbrzn/AetherDownloader/releases)** and get the latest Windows build (zip).
+1. Open **[Releases](https://github.com/Aryanbrzn/AetherDownloader/releases)** and download the latest **win-x64** zip (self-contained).
 2. Extract the archive and run `AetherDownloader.App.exe`.
 3. If yt-dlp or FFmpeg is missing, confirm the in-app download prompt, or open **Settings → Download missing tools**.
 4. Try a freely licensed sample, for example:  
    [Big Buck Bunny (Internet Archive)](https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4) → **Inspect** → **Download**.
 
-> If no Release is published yet, build from source (next section).
-
 ### Requirements (running a release)
 
-- Windows 10 or 11  
-- [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download) (if the build is framework-dependent)  
+- Windows 10 or 11 (64-bit)  
+- No separate .NET install for the self-contained zip  
 - [Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) (usually already installed)  
-- **yt-dlp** and **FFmpeg** — not stored in this Git repository; installed by you or by the app into `%LOCALAPPDATA%\AetherDownloader\tools`
+- **yt-dlp** and **FFmpeg** — not inside the Git repo; the app can install official builds into `%LOCALAPPDATA%\AetherDownloader\tools`
 
 ---
 
