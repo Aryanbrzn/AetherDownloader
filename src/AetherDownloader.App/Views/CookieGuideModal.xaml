@@ -1,0 +1,199 @@
+<Window x:Class="AetherDownloader.App.Views.CookieGuideModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:controls="clr-namespace:AetherDownloader.App.Controls"
+        xmlns:behaviors="clr-namespace:AetherDownloader.App.Behaviors"
+        xmlns:converters="clr-namespace:AetherDownloader.App.Converters"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="Cookie Guide"
+        Width="900"
+        Height="560"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource Brush.Background}">
+  <Window.Resources>
+    <converters:StepVisibilityConverter x:Key="Step1Visibility" TargetStep="1"/>
+    <converters:StepVisibilityConverter x:Key="Step2Visibility" TargetStep="2"/>
+    <converters:StepVisibilityConverter x:Key="Step3Visibility" TargetStep="3"/>
+  </Window.Resources>
+
+  <Grid Margin="32">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="How to import browser cookies"
+               Style="{StaticResource TitleText}"/>
+    <TextBlock Grid.Row="1"
+               Text="Follow these 3 steps to download age-restricted or private content."
+               Style="{StaticResource Subtitle}"
+               Margin="0,8,0,24"/>
+
+    <controls:StepIndicator Grid.Row="2"
+                            CurrentStep="{Binding CurrentStep}"
+                            Margin="0,0,0,24"/>
+
+    <Border Grid.Row="3"
+            Style="{StaticResource CardBorder}"
+            Padding="24">
+      <Grid>
+        <StackPanel Visibility="{Binding CurrentStep, Converter={StaticResource Step1Visibility}}">
+          <TextBlock Text="STEP 1 OF 3 — Install the browser extension"
+                     Style="{StaticResource Body}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,16"/>
+          <TextBlock Text='Install "Get cookies.txt LOCALLY":'
+                     Style="{StaticResource Body}"
+                     Margin="0,0,0,12"/>
+          <StackPanel Orientation="Horizontal">
+            <Button Style="{StaticResource AccentButton}"
+                    Content="Chrome"
+                    Margin="0,0,8,0"
+                    Command="{Binding OpenBrowserExtensionCommand}"
+                    CommandParameter="Chrome"/>
+            <Button Style="{StaticResource AccentButton}"
+                    Content="Edge"
+                    Margin="0,0,8,0"
+                    Command="{Binding OpenBrowserExtensionCommand}"
+                    CommandParameter="Edge"/>
+            <Button Style="{StaticResource AccentButton}"
+                    Content="Firefox"
+                    Command="{Binding OpenBrowserExtensionCommand}"
+                    CommandParameter="Firefox"/>
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding CurrentStep, Converter={StaticResource Step2Visibility}}">
+          <TextBlock Text="STEP 2 OF 3 — Log in to the website"
+                     Style="{StaticResource Body}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,16"/>
+          <TextBlock Text="1. Open the site that hosts the public-domain or Creative Commons content you may access"
+                     Style="{StaticResource Body}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,8"/>
+          <TextBlock Text="2. Sign in only if that site requires it for content you are allowed to download"
+                     Style="{StaticResource Body}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,8"/>
+          <TextBlock Text="3. Confirm you can play the freely licensed media in the browser"
+                     Style="{StaticResource Body}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,16"/>
+          <Border Background="#33FCE100"
+                  BorderBrush="{StaticResource Brush.Warning}"
+                  BorderThickness="1"
+                  CornerRadius="4"
+                  Padding="12">
+            <TextBlock Text="⚠ Stay logged in — do not close the browser before Step 3."
+                       Style="{StaticResource Caption}"
+                       Foreground="{StaticResource Brush.Warning}"
+                       TextWrapping="Wrap"/>
+          </Border>
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding CurrentStep, Converter={StaticResource Step3Visibility}}">
+          <TextBlock Text="STEP 3 OF 3 — Export &amp; drop cookies into AetherDownloader"
+                     Style="{StaticResource Body}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,16"/>
+          <TextBlock Text="1. Click the extension icon"
+                     Style="{StaticResource Body}"
+                     Margin="0,0,0,8"/>
+          <TextBlock Text="2. Export cookies.txt for current site"
+                     Style="{StaticResource Body}"
+                     Margin="0,0,0,8"/>
+          <TextBlock Text="3. Drag the file here:"
+                     Style="{StaticResource Body}"
+                     Margin="0,0,0,16"/>
+
+          <Border MinHeight="120"
+                  CornerRadius="6"
+                  Background="{StaticResource Brush.SurfaceAlt}"
+                  Padding="16"
+                  behaviors:CookieDropBehavior.IsEnabled="True"
+                  behaviors:CookieDropBehavior.DropCommand="{Binding ImportDroppedFileCommand}">
+            <Border.Style>
+              <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="#555555"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding (behaviors:CookieDropBehavior.IsDragOver), RelativeSource={RelativeSource Self}}"
+                               Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Border.Style>
+            <TextBlock Text="Drop cookies.txt here"
+                       Style="{StaticResource Caption}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+          </Border>
+
+          <TextBlock Text="{Binding ImportResultText}"
+                     Margin="0,12,0,0"
+                     TextWrapping="Wrap">
+            <TextBlock.Style>
+              <Style TargetType="TextBlock" BasedOn="{StaticResource Body}">
+                <Setter Property="Visibility" Value="Collapsed"/>
+                <Style.Triggers>
+                  <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                      <Condition Binding="{Binding CookieImportSucceeded}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Success}"/>
+                  </MultiDataTrigger>
+                  <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                      <Condition Binding="{Binding CookieImportSucceeded}" Value="False"/>
+                      <Condition Binding="{Binding ImportResultText}" Value=""/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                  </MultiDataTrigger>
+                  <DataTrigger Binding="{Binding CookieImportSucceeded}" Value="False">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Error}"/>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </TextBlock.Style>
+          </TextBlock>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="4" Margin="0,24,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Button Grid.Column="1"
+              Content="← Back"
+              Style="{StaticResource HyperlinkButton}"
+              Command="{Binding BackCommand}"
+              Margin="0,0,16,0"/>
+      <Button Grid.Column="2"
+              Content="{Binding NextButtonText}"
+              Style="{StaticResource AccentButton}"
+              Command="{Binding NextCommand}"
+              MinWidth="100"
+              Margin="0,0,16,0"/>
+      <Button Grid.Column="3"
+              Content="Skip for now"
+              Style="{StaticResource HyperlinkButton}"
+              Command="{Binding SkipCommand}"/>
+    </Grid>
+  </Grid>
+</Window>

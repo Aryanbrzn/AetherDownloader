@@ -1,0 +1,130 @@
+<Window x:Class="AetherDownloader.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="Settings"
+        Icon="pack://application:,,,/Assets/app.ico"
+        Width="520"
+        Height="560"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource Brush.Background}"
+        ResizeMode="NoResize">
+  <Grid Margin="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="Settings"
+               Style="{StaticResource TitleText}"
+               Margin="0,0,0,24"/>
+
+    <StackPanel Grid.Row="1">
+      <TextBlock Text="Default output folder" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <Grid Margin="0,0,0,16">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0"
+                 Style="{StaticResource FluentTextBox}"
+                 Text="{Binding DefaultOutputPath, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Column="1"
+                Style="{StaticResource SecondaryButton}"
+                Content="Browse"
+                Command="{Binding BrowseOutputFolderCommand}"
+                Margin="8,0,0,0"
+                Padding="12,10"/>
+      </Grid>
+
+      <TextBlock Text="yt-dlp path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <Grid Margin="0,0,0,16">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0"
+                 Style="{StaticResource FluentTextBox}"
+                 Text="{Binding YtDlpPath, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Column="1"
+                Style="{StaticResource SecondaryButton}"
+                Content="Browse"
+                Command="{Binding BrowseYtDlpPathCommand}"
+                Margin="8,0,0,0"
+                Padding="12,10"/>
+      </Grid>
+
+      <TextBlock Text="FFmpeg path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <Grid Margin="0,0,0,8">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0"
+                 Style="{StaticResource FluentTextBox}"
+                 Text="{Binding FfmpegPath, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Column="1"
+                Style="{StaticResource SecondaryButton}"
+                Content="Browse"
+                Command="{Binding BrowseFfmpegPathCommand}"
+                Margin="8,0,0,0"
+                Padding="12,10"/>
+      </Grid>
+
+      <Button Content="Download missing tools"
+              Style="{StaticResource SecondaryButton}"
+              Command="{Binding DownloadToolsCommand}"
+              HorizontalAlignment="Left"
+              Padding="12,8"
+              Margin="0,0,0,4"/>
+      <TextBlock Text="{Binding ToolsStatus}"
+                 Style="{StaticResource Caption}"
+                 Opacity="0.8"
+                 Margin="0,0,0,16"
+                 TextWrapping="Wrap"/>
+
+      <TextBlock Text="Max parallel downloads" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <Slider Minimum="1"
+              Maximum="4"
+              Value="{Binding MaxParallelDownloads}"
+              TickFrequency="1"
+              IsSnapToTickEnabled="True"
+              Margin="0,0,0,16"/>
+
+      <CheckBox Content="Clipboard monitoring"
+                IsChecked="{Binding ClipboardMonitoring}"
+                Foreground="{StaticResource Brush.TextPrimary}"
+                Margin="0,0,0,16"/>
+
+      <TextBlock Text="Language" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <ComboBox Style="{StaticResource DarkComboBox}"
+                ItemsSource="{Binding Languages}"
+                SelectedItem="{Binding Language}"
+                Margin="0,0,0,16"/>
+
+      <TextBlock Text="Theme" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+      <ComboBox Style="{StaticResource DarkComboBox}"
+                ItemsSource="{Binding Themes}"
+                SelectedItem="{Binding Theme}"
+                Margin="0,0,0,16"/>
+    </StackPanel>
+
+    <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+      <Button Content="Cancel"
+              Style="{StaticResource SecondaryButton}"
+              Click="OnCancelClick"
+              Padding="16,10"
+              MinWidth="80"
+              Margin="0,0,8,0"/>
+      <Button Content="OK"
+              Click="OnSaveClick"
+              Style="{StaticResource AccentButton}"
+              MinWidth="80"/>
+    </StackPanel>
+  </Grid>
+</Window>

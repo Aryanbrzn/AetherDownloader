@@ -1,0 +1,9 @@
+ERROR: Sign in required to confirm your age
+ERROR: Unable to download video: HTTP Error 403: Forbidden
+ERROR: not available in your country
+ERROR: No space left on device
+ERROR: ffmpeg not found at path
+ERROR: Requested format is not available
+ERROR: HTTP Error 429: Too Many Requests
+ERROR: Connection reset by peer
+ERROR: Something completely unexpected happened

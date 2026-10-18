@@ -1,0 +1,14 @@
+[ytdlp] Downloading video metadata
+[download] Downloading item 1 of 1
+[download]  12.5% of 100.00MiB at  2.50MiB/s ETA 00:35
+[download]  25.0% of 100.00MiB at  3.10MiB/s ETA 00:24
+[download]  37.5% of 100.00MiB at  3.50MiB/s ETA 00:18
+[download]  50.0% of 100.00MiB at  3.80MiB/s ETA 00:13
+[download]  62.5% of 100.00MiB at  4.00MiB/s ETA 00:09
+[download]  75.0% of 100.00MiB at  4.10MiB/s ETA 00:06
+[download]  87.5% of 100.00MiB at  4.20MiB/s ETA 00:03
+[download] 100.0% of 100.00MiB at  4.30MiB/s ETA 00:00
+[download] Destination: C:\Downloads\AetherDownloader\Sample Test Video.mp4
+[Merger] Merging formats into "Sample Test Video.mp4"
+[ExtractAudio] Destination: C:\Downloads\AetherDownloader\Sample Test Video.mp3
+[download] Finished downloading

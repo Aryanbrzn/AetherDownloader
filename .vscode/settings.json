@@ -1,0 +1,9 @@
+{
+  "dotnet.defaultSolution": "AetherDownloader.sln",
+  "dotnet.restore.projectSpec": "AetherDownloader.sln",
+  "dotnet.server.useOmnisharp": false,
+  "dotnet.nuget.configFilePath": "${workspaceFolder}/nuget.config",
+  "dotnet.restore.configFile": "${workspaceFolder}/nuget.config",
+  "csharp-dev-tools.debug.enableWatch": false,
+  "csharp-dev-tools.debug.launchConsole": "integratedTerminal"
+}

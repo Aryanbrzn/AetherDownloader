@@ -1,0 +1,37 @@
+<UserControl x:Class="AetherDownloader.App.Views.AppStatusBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+  <Border Background="{StaticResource Brush.SurfaceAlt}"
+          BorderBrush="#404040"
+          BorderThickness="0,1,0,0"
+          Padding="24,8">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Text="{Binding StatusText}" Style="{StaticResource Caption}" Margin="0,0,8,0"/>
+        <TextBlock Text="·" Style="{StaticResource Caption}" Margin="0,0,8,0"/>
+        <TextBlock Text="{Binding YtDlpVersion}" Style="{StaticResource Caption}" Margin="0,0,8,0"/>
+        <TextBlock Text="·" Style="{StaticResource Caption}" Margin="0,0,8,0"/>
+        <TextBlock Text="{Binding FfmpegStatus}" Style="{StaticResource Caption}" Margin="0,0,16,0"/>
+        <TextBlock Text="Clipboard Monitor" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+        <ui:ToggleSwitch IsOn="{Binding ClipboardMonitoring, Mode=TwoWay}"/>
+      </StackPanel>
+
+      <StackPanel Grid.Column="2" Orientation="Horizontal">
+        <Button Content="About"
+                Style="{StaticResource HyperlinkButton}"
+                Command="{Binding OpenAboutCommand}"
+                Margin="0,0,12,0"/>
+        <Button Content="⚙ Settings"
+                Style="{StaticResource HyperlinkButton}"
+                Command="{Binding OpenSettingsCommand}"/>
+      </StackPanel>
+    </Grid>
+  </Border>
+</UserControl>

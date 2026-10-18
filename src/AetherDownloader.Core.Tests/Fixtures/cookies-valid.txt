@@ -1,0 +1,5 @@
+# Netscape HTTP Cookie File
+# This is a generated file! Do not edit.
+
+.example.com	TRUE	/	FALSE	1893456000	session_id	abc123def456
+.example.com	TRUE	/	TRUE	1893456000	auth_token	secretvalue

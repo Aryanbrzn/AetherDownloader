@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch AetherDownloader.App",
+      "type": "devtools",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/AetherDownloader.App/AetherDownloader.App.csproj",
+      "projectType": "wpf",
+      "withDebug": true,
+      "targetFramework": "net10.0-windows",
+      "configuration": "Debug",
+      "enableWatch": false,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "AetherDownloader (coreclr)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-app",
+      "program": "${workspaceFolder}/src/AetherDownloader.App/bin/Debug/net10.0-windows/AetherDownloader.App.exe",
+      "cwd": "${workspaceFolder}/src/AetherDownloader.App/bin/Debug/net10.0-windows",
+      "stopAtEntry": false
+    },
+    {
+      "name": "AetherDownloader (AppRunner)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-app-runner",
+      "program": "${workspaceFolder}/.vscodecsdt/Runners/AetherDownloader.AppRunner/bin/Debug/net10.0-windows/AetherDownloader.AppRunner.exe",
+      "cwd": "${workspaceFolder}/src/AetherDownloader.App/bin/Debug/net10.0-windows",
+      "stopAtEntry": false
+    }
+  ]
+}

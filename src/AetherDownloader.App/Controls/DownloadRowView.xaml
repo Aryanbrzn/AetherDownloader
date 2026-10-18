@@ -1,0 +1,113 @@
+<UserControl x:Class="AetherDownloader.App.Controls.DownloadRowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:AetherDownloader.App.Controls"
+             xmlns:converters="clr-namespace:AetherDownloader.App.Converters"
+             xmlns:models="clr-namespace:AetherDownloader.Core.Models;assembly=AetherDownloader.Core">
+  <UserControl.Resources>
+    <converters:DownloadStateToVisibilityConverter x:Key="DownloadingVisibility" TargetState="{x:Static models:DownloadJobState.Downloading}"/>
+    <converters:DownloadStateToVisibilityConverter x:Key="PendingVisibility" TargetState="{x:Static models:DownloadJobState.Pending}"/>
+    <converters:DownloadStateToVisibilityConverter x:Key="CompletedVisibility" TargetState="{x:Static models:DownloadJobState.Completed}"/>
+    <converters:DownloadStateToVisibilityConverter x:Key="FailedVisibility" TargetState="{x:Static models:DownloadJobState.Failed}"/>
+    <converters:DownloadStateToVisibilityConverter x:Key="CancelledVisibility" TargetState="{x:Static models:DownloadJobState.Cancelled}"/>
+  </UserControl.Resources>
+  <Border Style="{StaticResource CardBorder}" Padding="12" Margin="0,0,0,8">
+    <StackPanel>
+      <Grid Margin="0,0,0,8">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0"
+                   Text="{Binding Title}"
+                   Style="{StaticResource Body}"
+                   TextTrimming="CharacterEllipsis"/>
+        <Border Grid.Column="1"
+                Background="{StaticResource Brush.SurfaceAlt}"
+                CornerRadius="4"
+                Padding="6,2"
+                Margin="8,0,8,0">
+          <TextBlock Text="{Binding FormatLabel}" Style="{StaticResource Caption}"/>
+        </Border>
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+          <Button Content="Cancel"
+                  Command="{Binding CancelCommand}"
+                  Style="{StaticResource HyperlinkButton}"
+                  Visibility="{Binding Status, Converter={StaticResource DownloadingVisibility}}"/>
+          <Button Content="Cancel"
+                  Command="{Binding CancelCommand}"
+                  Style="{StaticResource HyperlinkButton}"
+                  Visibility="{Binding Status, Converter={StaticResource PendingVisibility}}"/>
+          <Button Content="Open Folder"
+                  Command="{Binding OpenFolderCommand}"
+                  Style="{StaticResource HyperlinkButton}"
+                  Visibility="{Binding Status, Converter={StaticResource CompletedVisibility}}"/>
+          <Button Content="Retry"
+                  Command="{Binding RetryCommand}"
+                  Style="{StaticResource HyperlinkButton}"
+                  Visibility="{Binding Status, Converter={StaticResource FailedVisibility}}"/>
+          <Button Content="Remove"
+                  Command="{Binding RemoveCommand}"
+                  Style="{StaticResource HyperlinkButton}"
+                  Visibility="{Binding Status, Converter={StaticResource CancelledVisibility}}"/>
+        </StackPanel>
+      </Grid>
+
+      <ProgressBar Value="{Binding Percent}"
+                   Maximum="100"
+                   Height="4"
+                   Margin="0,0,0,6">
+        <ProgressBar.Style>
+          <Style TargetType="ProgressBar">
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding IsIndeterminate}" Value="True">
+                <Setter Property="IsIndeterminate" Value="True"/>
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </ProgressBar.Style>
+      </ProgressBar>
+
+      <StackPanel Orientation="Horizontal" Visibility="{Binding Status, Converter={StaticResource DownloadingVisibility}}">
+        <TextBlock Style="{StaticResource MonoCaption}">
+          <Run Text="{Binding Speed, Mode=OneWay}"/>
+          <Run Text=" · "/>
+          <Run Text="{Binding Eta, Mode=OneWay}"/>
+          <Run Text=" · "/>
+          <Run Text="{Binding SizeProgress, Mode=OneWay}"/>
+        </TextBlock>
+        <TextBlock Margin="8,0,0,0">
+          <TextBlock.Style>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource MonoCaption}">
+              <Setter Property="Visibility" Value="Collapsed"/>
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Phase}" Value="{x:Static models:DownloadPhase.Merging}">
+                  <Setter Property="Visibility" Value="Visible"/>
+                  <Setter Property="Text" Value="Merging…"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Phase}" Value="{x:Static models:DownloadPhase.Extracting}">
+                  <Setter Property="Visibility" Value="Visible"/>
+                  <Setter Property="Text" Value="Extracting…"/>
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </TextBlock.Style>
+        </TextBlock>
+      </StackPanel>
+
+      <controls:InlineErrorBanner>
+        <controls:InlineErrorBanner.Style>
+          <Style TargetType="controls:InlineErrorBanner">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding ShowErrorBanner}" Value="True">
+                <Setter Property="Visibility" Value="Visible"/>
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </controls:InlineErrorBanner.Style>
+      </controls:InlineErrorBanner>
+    </StackPanel>
+  </Border>
+</UserControl>

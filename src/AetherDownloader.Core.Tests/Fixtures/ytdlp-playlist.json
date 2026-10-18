@@ -1,0 +1,19 @@
+{
+  "_type": "playlist",
+  "id": "PLtest123456",
+  "title": "Sample Test Playlist",
+  "uploader": "Playlist Channel",
+  "thumbnail": "https://i.ytimg.com/vi/PLtest123456/hqdefault.jpg",
+  "extractor": "youtube:tab",
+  "is_live": false,
+  "entries": [
+    {
+      "id": "vid001",
+      "title": "First Video"
+    },
+    {
+      "id": "vid002",
+      "title": "Second Video"
+    }
+  ]
+}

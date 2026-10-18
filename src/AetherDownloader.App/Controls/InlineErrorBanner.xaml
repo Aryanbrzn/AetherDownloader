@@ -1,0 +1,39 @@
+<UserControl x:Class="AetherDownloader.App.Controls.InlineErrorBanner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:AetherDownloader.Core.Models;assembly=AetherDownloader.Core">
+  <Border Background="#20FF4444"
+          BorderBrush="{StaticResource Brush.Error}"
+          BorderThickness="1"
+          CornerRadius="4"
+          Padding="12,8"
+          Margin="0,8,0,0">
+    <StackPanel>
+      <TextBlock Text="{Binding DisplayErrorTitle}"
+                 FontWeight="SemiBold"
+                 Foreground="{StaticResource Brush.Error}"
+                 Margin="0,0,0,4"/>
+      <TextBlock Text="{Binding DisplayError}"
+                 Style="{StaticResource Caption}"
+                 TextWrapping="Wrap"
+                 Margin="0,0,0,8"/>
+      <StackPanel Orientation="Horizontal">
+        <Button Content="Retry"
+                Command="{Binding RetryCommand}"
+                Style="{StaticResource HyperlinkButton}"
+                Margin="0,0,8,0"/>
+        <Button Content="Update Cookie"
+                Command="{Binding UpdateCookieCommand}"
+                Style="{StaticResource HyperlinkButton}"
+                Margin="0,0,8,0"/>
+        <Button Content="Settings"
+                Command="{Binding OpenSettingsCommand}"
+                Style="{StaticResource HyperlinkButton}"
+                Margin="0,0,8,0"/>
+        <Button Content="Copy Log"
+                Command="{Binding CopyLogCommand}"
+                Style="{StaticResource HyperlinkButton}"/>
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</UserControl>

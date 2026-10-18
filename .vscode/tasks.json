@@ -1,0 +1,75 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "restore",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "restore",
+        "${workspaceFolder}/AetherDownloader.sln",
+        "--configfile",
+        "${workspaceFolder}/nuget.config"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": "build"
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/AetherDownloader.sln",
+        "--configfile",
+        "${workspaceFolder}/nuget.config",
+        "--no-restore"
+      ],
+      "dependsOn": "restore",
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "build-app",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/AetherDownloader.App/AetherDownloader.App.csproj",
+        "--no-restore"
+      ],
+      "dependsOn": "restore",
+      "problemMatcher": "$msCompile",
+      "group": "build"
+    },
+    {
+      "label": "build-app-runner",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/.vscodecsdt/Runners/AetherDownloader.AppRunner/AetherDownloader.AppRunner.csproj",
+        "--no-restore"
+      ],
+      "dependsOn": "build-app",
+      "problemMatcher": "$msCompile",
+      "group": "build"
+    },
+    {
+      "label": "test",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "${workspaceFolder}/AetherDownloader.sln",
+        "--no-build"
+      ],
+      "dependsOn": "build",
+      "problemMatcher": "$msCompile",
+      "group": "test"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+<UserControl x:Class="AetherDownloader.App.Views.DownloadQueuePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:AetherDownloader.App.Controls">
+  <StackPanel>
+    <TextBlock Text="{Binding HeaderText}"
+               Style="{StaticResource Subtitle}"
+               Margin="0,0,0,12"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <ItemsControl ItemsSource="{Binding Downloads}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <controls:DownloadRowView DataContext="{Binding}"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,56 @@
+<Window x:Class="AetherDownloader.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:controls="clr-namespace:AetherDownloader.App.Controls"
+        xmlns:views="clr-namespace:AetherDownloader.App.Views"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="AetherDownloader"
+        Icon="pack://application:,,,/Assets/app.ico"
+        MinWidth="900"
+        MinHeight="600"
+        Width="1100"
+        Height="720"
+        Background="{StaticResource Brush.Background}">
+  <Grid x:Name="RootGrid">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <controls:FluentTitleBar Grid.Row="0"/>
+    <views:UrlCookieBar Grid.Row="1"
+                        Margin="24,16,24,8"
+                        DataContext="{Binding UrlCookieBar}"/>
+
+    <Grid Grid.Row="2" Margin="24,8,24,8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <views:MetadataCard Grid.Column="0" DataContext="{Binding MetadataCard}"/>
+      <views:QuickActionsPanel Grid.Column="1"
+                               Margin="16,0,0,0"
+                               DataContext="{Binding MetadataCard}"/>
+    </Grid>
+
+    <views:DownloadQueuePanel Grid.Row="3"
+                              Margin="24,8,24,16"
+                              DataContext="{Binding DownloadQueue}"/>
+
+    <views:AppStatusBar Grid.Row="4" DataContext="{Binding StatusBar}"/>
+
+    <Border x:Name="ToastHostBorder"
+            Grid.Row="3"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Stretch"
+            Margin="24,0,24,8"
+            Visibility="Collapsed"
+            CornerRadius="4"
+            Padding="12,8"
+            Background="{StaticResource Brush.SurfaceAlt}"/>
+  </Grid>
+</Window>

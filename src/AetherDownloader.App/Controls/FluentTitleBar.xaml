@@ -1,0 +1,12 @@
+<UserControl x:Class="AetherDownloader.App.Controls.FluentTitleBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="32"
+             Background="{StaticResource Brush.Surface}">
+  <Grid Margin="16,0">
+    <TextBlock Text="AetherDownloader"
+               Style="{StaticResource Caption}"
+               VerticalAlignment="Center"
+               Foreground="{StaticResource Brush.TextSecondary}"/>
+  </Grid>
+</UserControl>
