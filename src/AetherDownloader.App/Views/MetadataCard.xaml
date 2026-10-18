@@ -55,13 +55,10 @@
                      Style="{StaticResource TitleText}"
                      TextWrapping="Wrap"
                      Margin="0,0,0,4"/>
-          <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,12">
-            <Run Text="{Binding ChannelName, Mode=OneWay}"/>
-            <Run Text=" · "/>
-            <Run Text="{Binding DurationFormatted, Mode=OneWay}"/>
-            <Run Text=" · "/>
-            <Run Text="{Binding Extractor, Mode=OneWay}"/>
-          </TextBlock>
+          <TextBlock Text="{Binding MetadataSummary}"
+                     Style="{StaticResource Caption}"
+                     Margin="0,0,0,12"
+                     TextWrapping="Wrap"/>
           <ComboBox Style="{StaticResource FormatComboBox}"
                     ItemsSource="{Binding FormatGroupsView}"
                     SelectedItem="{Binding SelectedFormat}"

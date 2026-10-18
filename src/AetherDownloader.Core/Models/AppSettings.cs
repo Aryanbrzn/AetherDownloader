@@ -12,7 +12,7 @@ public sealed record AppSettings
     public string? FfmpegPath { get; init; }
     public int MaxParallelDownloads { get; init; } = 2;
     public bool ClipboardMonitoring { get; init; } = true;
-    public AppLanguage Language { get; init; } = AppLanguage.Fa;
+    public AppLanguage Language { get; init; } = AppLanguage.En;
     public AppTheme Theme { get; init; } = AppTheme.Dark;
     public Guid? ActiveCookieProfileId { get; init; }
 }

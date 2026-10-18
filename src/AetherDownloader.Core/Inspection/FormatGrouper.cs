@@ -22,14 +22,25 @@ public static class FormatGrouper
 
     public static IReadOnlyList<FormatOption> Group(IReadOnlyList<FormatOption> rawFormats)
     {
+        var bestNote = LooksLikeSeparateAvStreams(rawFormats)
+            ? "Auto merge video+audio via FFmpeg"
+            : "Best available (original file)";
+
+        var bestExtension = rawFormats
+            .Select(static f => f.Extension)
+            .FirstOrDefault(static ext => !string.IsNullOrWhiteSpace(ext) && ext is not "unknown")
+            ?? "mp4";
+
         var result = new List<FormatOption>
         {
             new()
             {
                 FormatId = "best",
-                Extension = "mp4",
-                Note = "Auto merge video+audio via FFmpeg",
+                Extension = bestExtension,
+                Note = bestNote,
                 GroupLabel = GroupBest,
+                FileSizeApproxBytes = rawFormats.Count == 1 ? rawFormats[0].FileSizeApproxBytes : null,
+                Resolution = rawFormats.Count == 1 ? rawFormats[0].Resolution : null,
             },
         };
 
@@ -67,6 +78,22 @@ public static class FormatGrouper
         !string.IsNullOrEmpty(format.AudioCodec)
         && format.AudioCodec != "none"
         && (string.IsNullOrEmpty(format.VideoCodec) || format.VideoCodec == "none");
+
+    /// <summary>
+    /// True when yt-dlp reported separate video-only and audio-only streams (typical adaptive sites).
+    /// Direct/generic progressive files usually have neither, so "FFmpeg merge" would be misleading.
+    /// </summary>
+    internal static bool LooksLikeSeparateAvStreams(IReadOnlyList<FormatOption> rawFormats)
+    {
+        var hasVideoOnly = rawFormats.Any(static f =>
+            !IsAudioOnly(f)
+            && !string.IsNullOrEmpty(f.VideoCodec)
+            && f.VideoCodec != "none"
+            && (string.IsNullOrEmpty(f.AudioCodec) || f.AudioCodec == "none"));
+
+        var hasAudioOnly = rawFormats.Any(IsAudioOnly);
+        return hasVideoOnly && hasAudioOnly;
+    }
 
     public static int? TryGetHeight(FormatOption format)
     {

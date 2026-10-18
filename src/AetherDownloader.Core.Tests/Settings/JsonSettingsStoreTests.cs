@@ -62,7 +62,7 @@ public sealed class JsonSettingsStoreTests : IDisposable
         var loaded = await _store.LoadAsync(CancellationToken.None);
 
         loaded.MaxParallelDownloads.Should().Be(2);
-        loaded.Language.Should().Be(AppLanguage.Fa);
+        loaded.Language.Should().Be(AppLanguage.En);
         loaded.Theme.Should().Be(AppTheme.Dark);
         File.Exists(_settingsPath).Should().BeFalse();
     }

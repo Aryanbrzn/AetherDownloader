@@ -66,7 +66,7 @@ public partial class MetadataCardViewModel : ViewModelBase
 
     public bool HasFormats => Formats.Count > 0;
 
-    public string Title => Metadata?.Title ?? string.Empty;
+    public string Title => FormatDisplayTitle(Metadata?.Title);
 
     public string ChannelName => Metadata?.Uploader ?? string.Empty;
 
@@ -87,6 +87,41 @@ public partial class MetadataCardViewModel : ViewModelBase
     }
 
     public string Extractor => Metadata?.Extractor ?? string.Empty;
+
+    /// <summary>
+    /// Channel · duration · extractor — empty fields are omitted (avoids " · · generic").
+    /// </summary>
+    public string MetadataSummary
+    {
+        get
+        {
+            if (Metadata is null)
+            {
+                return string.Empty;
+            }
+
+            var parts = new List<string>();
+            if (!string.IsNullOrWhiteSpace(ChannelName))
+            {
+                parts.Add(ChannelName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(DurationFormatted))
+            {
+                parts.Add(DurationFormatted);
+            }
+
+            if (!string.IsNullOrWhiteSpace(Extractor))
+            {
+                parts.Add(
+                    string.Equals(Extractor, "generic", StringComparison.OrdinalIgnoreCase)
+                        ? "Direct file"
+                        : Extractor);
+            }
+
+            return string.Join(" · ", parts);
+        }
+    }
 
     public bool CanDownload => SelectedFormat is not null && State == MetadataCardState.Loaded;
 
@@ -110,6 +145,17 @@ public partial class MetadataCardViewModel : ViewModelBase
         OnPropertyChanged(nameof(ChannelName));
         OnPropertyChanged(nameof(DurationFormatted));
         OnPropertyChanged(nameof(Extractor));
+        OnPropertyChanged(nameof(MetadataSummary));
+    }
+
+    private static string FormatDisplayTitle(string? title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            return string.Empty;
+        }
+
+        return title.Replace('_', ' ').Trim();
     }
 
     public void BeginInspect()

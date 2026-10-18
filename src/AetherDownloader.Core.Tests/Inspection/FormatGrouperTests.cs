@@ -14,7 +14,28 @@ public sealed class FormatGrouperTests
 
         grouped.Should().Contain(f =>
             f.FormatId == "best"
-            && f.GroupLabel == FormatGrouper.GroupBest);
+            && f.GroupLabel == FormatGrouper.GroupBest
+            && f.Note == "Auto merge video+audio via FFmpeg");
+    }
+
+    [Fact]
+    public void Group_SingleProgressiveFile_UsesOriginalFileBestNote()
+    {
+        var raw = new List<FormatOption>
+        {
+            new()
+            {
+                FormatId = "mp4",
+                Extension = "mp4",
+            },
+        };
+
+        var grouped = FormatGrouper.Group(raw);
+
+        grouped.Should().Contain(f =>
+            f.FormatId == "best"
+            && f.Note == "Best available (original file)"
+            && f.Extension == "mp4");
     }
 
     [Fact]

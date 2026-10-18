@@ -53,9 +53,6 @@ public partial class SettingsViewModel : ViewModelBase
     private bool _clipboardMonitoring = true;
 
     [ObservableProperty]
-    private AppLanguage _language = AppLanguage.Fa;
-
-    [ObservableProperty]
     private AppTheme _theme = AppTheme.Dark;
 
     [ObservableProperty]
@@ -64,7 +61,11 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private string _toolsStatus = string.Empty;
 
-    public AppLanguage[] Languages { get; } = [AppLanguage.Fa, AppLanguage.En];
+    [ObservableProperty]
+    private double _toolsProgressPercent;
+
+    [ObservableProperty]
+    private bool _toolsProgressIsIndeterminate;
 
     public AppTheme[] Themes { get; } = [AppTheme.Dark, AppTheme.Light];
 
@@ -116,14 +117,19 @@ public partial class SettingsViewModel : ViewModelBase
     private async Task DownloadToolsAsync()
     {
         IsDownloadingTools = true;
-        ToolsStatus = string.Empty;
-        var progress = new Progress<string>(message => ToolsStatus = message);
+        ToolsStatus = "Starting…";
+        ToolsProgressPercent = 0;
+        ToolsProgressIsIndeterminate = true;
+
+        var progress = new Progress<ToolDownloadProgress>(OnToolProgress);
 
         try
         {
             await _toolBootstrapper.EnsureYtDlpAsync(progress, CancellationToken.None).ConfigureAwait(true);
             await _toolBootstrapper.EnsureFfmpegAsync(progress, CancellationToken.None).ConfigureAwait(true);
             ToolsStatus = "Tools ready.";
+            ToolsProgressPercent = 100;
+            ToolsProgressIsIndeterminate = false;
             await _statusBar.RefreshToolVersionsAsync().ConfigureAwait(true);
             _dialogService.ShowInfo(
                 "Tools",
@@ -132,6 +138,7 @@ public partial class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             ToolsStatus = "Download failed.";
+            ToolsProgressIsIndeterminate = false;
             _dialogService.ShowError(
                 "Tool download failed",
                 $"{ex.Message}{Environment.NewLine}{Environment.NewLine}You can also install the tools manually and set paths above.");
@@ -141,6 +148,19 @@ public partial class SettingsViewModel : ViewModelBase
             IsDownloadingTools = false;
             DownloadToolsCommand.NotifyCanExecuteChanged();
         }
+    }
+
+    private void OnToolProgress(ToolDownloadProgress report)
+    {
+        ToolsStatus = report.Message;
+        if (report.PercentComplete is null)
+        {
+            ToolsProgressIsIndeterminate = true;
+            return;
+        }
+
+        ToolsProgressIsIndeterminate = false;
+        ToolsProgressPercent = report.PercentComplete.Value;
     }
 
     private bool CanDownloadTools() => !IsDownloadingTools;
@@ -156,7 +176,7 @@ public partial class SettingsViewModel : ViewModelBase
             FfmpegPath = string.IsNullOrWhiteSpace(FfmpegPath) ? null : FfmpegPath,
             MaxParallelDownloads = MaxParallelDownloads,
             ClipboardMonitoring = ClipboardMonitoring,
-            Language = Language,
+            Language = AppLanguage.En,
             Theme = Theme,
             ActiveCookieProfileId = _settingsHolder.Current.ActiveCookieProfileId,
         };
@@ -175,7 +195,6 @@ public partial class SettingsViewModel : ViewModelBase
         FfmpegPath = settings.FfmpegPath;
         MaxParallelDownloads = settings.MaxParallelDownloads;
         ClipboardMonitoring = settings.ClipboardMonitoring;
-        Language = settings.Language;
         Theme = settings.Theme;
     }
 }

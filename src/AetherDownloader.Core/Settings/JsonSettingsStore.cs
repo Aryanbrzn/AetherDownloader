@@ -42,8 +42,9 @@ public sealed class JsonSettingsStore : ISettingsStore
 
             await using var stream = File.OpenRead(_settingsPath);
             var settings = await JsonSerializer.DeserializeAsync<AppSettings>(stream, JsonOptions, cancellationToken)
+                .ConfigureAwait(false)
                 ?? new AppSettings();
-            settings = ClampParallelDownloads(settings);
+            settings = Normalize(settings);
             _holder.Update(settings);
             return settings;
         }
@@ -57,17 +58,25 @@ public sealed class JsonSettingsStore : ISettingsStore
 
     public async Task SaveAsync(AppSettings settings, CancellationToken cancellationToken)
     {
-        var clamped = ClampParallelDownloads(settings);
-        _holder.Update(clamped);
+        var normalized = Normalize(settings);
+        _holder.Update(normalized);
         await using var stream = File.Create(_settingsPath);
-        await JsonSerializer.SerializeAsync(stream, clamped, JsonOptions, cancellationToken);
+        await JsonSerializer.SerializeAsync(stream, normalized, JsonOptions, cancellationToken)
+            .ConfigureAwait(false);
     }
 
-    private static AppSettings ClampParallelDownloads(AppSettings settings)
+    private static AppSettings Normalize(AppSettings settings)
     {
-        var clamped = Math.Clamp(settings.MaxParallelDownloads, 1, 4);
-        return clamped == settings.MaxParallelDownloads
-            ? settings
-            : settings with { MaxParallelDownloads = clamped };
+        var parallel = Math.Clamp(settings.MaxParallelDownloads, 1, 4);
+        if (parallel == settings.MaxParallelDownloads && settings.Language == AppLanguage.En)
+        {
+            return settings;
+        }
+
+        return settings with
+        {
+            MaxParallelDownloads = parallel,
+            Language = AppLanguage.En,
+        };
     }
 }

@@ -6,10 +6,14 @@
         Title="Settings"
         Icon="pack://application:,,,/Assets/app.ico"
         Width="520"
-        Height="560"
+        Height="600"
+        MinHeight="480"
         WindowStartupLocation="CenterOwner"
         Background="{StaticResource Brush.Background}"
-        ResizeMode="NoResize">
+        ResizeMode="CanResizeWithGrip">
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+  </Window.Resources>
   <Grid Margin="24">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -20,101 +24,122 @@
     <TextBlock Grid.Row="0"
                Text="Settings"
                Style="{StaticResource TitleText}"
-               Margin="0,0,0,24"/>
+               Margin="0,0,0,16"/>
 
-    <StackPanel Grid.Row="1">
-      <TextBlock Text="Default output folder" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <Grid Margin="0,0,0,16">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0"
-                 Style="{StaticResource FluentTextBox}"
-                 Text="{Binding DefaultOutputPath, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="1"
+    <ScrollViewer Grid.Row="1"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Margin="0,0,8,0">
+        <TextBlock Text="Default output folder" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+        <Grid Margin="0,0,0,16">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBox Grid.Column="0"
+                   Style="{StaticResource FluentTextBox}"
+                   Text="{Binding DefaultOutputPath, UpdateSourceTrigger=PropertyChanged}"/>
+          <Button Grid.Column="1"
+                  Style="{StaticResource SecondaryButton}"
+                  Content="Browse"
+                  Command="{Binding BrowseOutputFolderCommand}"
+                  Margin="8,0,0,0"
+                  Padding="12,10"/>
+        </Grid>
+
+        <TextBlock Text="yt-dlp path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+        <Grid Margin="0,0,0,16">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBox Grid.Column="0"
+                   Style="{StaticResource FluentTextBox}"
+                   Text="{Binding YtDlpPath, UpdateSourceTrigger=PropertyChanged}"/>
+          <Button Grid.Column="1"
+                  Style="{StaticResource SecondaryButton}"
+                  Content="Browse"
+                  Command="{Binding BrowseYtDlpPathCommand}"
+                  Margin="8,0,0,0"
+                  Padding="12,10"/>
+        </Grid>
+
+        <TextBlock Text="FFmpeg path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+        <Grid Margin="0,0,0,8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBox Grid.Column="0"
+                   Style="{StaticResource FluentTextBox}"
+                   Text="{Binding FfmpegPath, UpdateSourceTrigger=PropertyChanged}"/>
+          <Button Grid.Column="1"
+                  Style="{StaticResource SecondaryButton}"
+                  Content="Browse"
+                  Command="{Binding BrowseFfmpegPathCommand}"
+                  Margin="8,0,0,0"
+                  Padding="12,10"/>
+        </Grid>
+
+        <Button Content="Download missing tools"
                 Style="{StaticResource SecondaryButton}"
-                Content="Browse"
-                Command="{Binding BrowseOutputFolderCommand}"
-                Margin="8,0,0,0"
-                Padding="12,10"/>
-      </Grid>
+                Command="{Binding DownloadToolsCommand}"
+                HorizontalAlignment="Left"
+                Padding="12,8"
+                Margin="0,0,0,8"/>
 
-      <TextBlock Text="yt-dlp path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <Grid Margin="0,0,0,16">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0"
-                 Style="{StaticResource FluentTextBox}"
-                 Text="{Binding YtDlpPath, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="1"
-                Style="{StaticResource SecondaryButton}"
-                Content="Browse"
-                Command="{Binding BrowseYtDlpPathCommand}"
-                Margin="8,0,0,0"
-                Padding="12,10"/>
-      </Grid>
+        <TextBlock Text="{Binding ToolsStatus}"
+                   Style="{StaticResource Caption}"
+                   Opacity="0.85"
+                   Margin="0,0,0,6"
+                   TextWrapping="Wrap"
+                   MinHeight="18"/>
 
-      <TextBlock Text="FFmpeg path (optional)" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <Grid Margin="0,0,0,8">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0"
-                 Style="{StaticResource FluentTextBox}"
-                 Text="{Binding FfmpegPath, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="1"
-                Style="{StaticResource SecondaryButton}"
-                Content="Browse"
-                Command="{Binding BrowseFfmpegPathCommand}"
-                Margin="8,0,0,0"
-                Padding="12,10"/>
-      </Grid>
+        <ProgressBar Height="8"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="{Binding ToolsProgressPercent}"
+                     IsIndeterminate="{Binding ToolsProgressIsIndeterminate}"
+                     Visibility="{Binding IsDownloadingTools, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Margin="0,0,0,16"/>
 
-      <Button Content="Download missing tools"
-              Style="{StaticResource SecondaryButton}"
-              Command="{Binding DownloadToolsCommand}"
-              HorizontalAlignment="Left"
-              Padding="12,8"
-              Margin="0,0,0,4"/>
-      <TextBlock Text="{Binding ToolsStatus}"
-                 Style="{StaticResource Caption}"
-                 Opacity="0.8"
-                 Margin="0,0,0,16"
-                 TextWrapping="Wrap"/>
-
-      <TextBlock Text="Max parallel downloads" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <Slider Minimum="1"
-              Maximum="4"
-              Value="{Binding MaxParallelDownloads}"
-              TickFrequency="1"
-              IsSnapToTickEnabled="True"
-              Margin="0,0,0,16"/>
-
-      <CheckBox Content="Clipboard monitoring"
-                IsChecked="{Binding ClipboardMonitoring}"
-                Foreground="{StaticResource Brush.TextPrimary}"
+        <Grid Margin="0,0,0,4">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="Max parallel downloads" Style="{StaticResource Caption}"/>
+          <TextBlock Grid.Column="1"
+                     Text="{Binding MaxParallelDownloads}"
+                     Style="{StaticResource Caption}"
+                     FontWeight="SemiBold"/>
+        </Grid>
+        <Slider Minimum="1"
+                Maximum="4"
+                Value="{Binding MaxParallelDownloads}"
+                TickFrequency="1"
+                TickPlacement="BottomRight"
+                IsSnapToTickEnabled="True"
+                AutoToolTipPlacement="TopLeft"
                 Margin="0,0,0,16"/>
 
-      <TextBlock Text="Language" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <ComboBox Style="{StaticResource DarkComboBox}"
-                ItemsSource="{Binding Languages}"
-                SelectedItem="{Binding Language}"
-                Margin="0,0,0,16"/>
+        <CheckBox Content="Clipboard monitoring"
+                  IsChecked="{Binding ClipboardMonitoring}"
+                  Foreground="{StaticResource Brush.TextPrimary}"
+                  Margin="0,0,0,16"/>
 
-      <TextBlock Text="Theme" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
-      <ComboBox Style="{StaticResource DarkComboBox}"
-                ItemsSource="{Binding Themes}"
-                SelectedItem="{Binding Theme}"
-                Margin="0,0,0,16"/>
-    </StackPanel>
+        <TextBlock Text="Theme" Style="{StaticResource Caption}" Margin="0,0,0,4"/>
+        <ComboBox Style="{StaticResource DarkComboBox}"
+                  ItemsSource="{Binding Themes}"
+                  SelectedItem="{Binding Theme}"
+                  Margin="0,0,0,8"/>
+      </StackPanel>
+    </ScrollViewer>
 
     <StackPanel Grid.Row="2"
                 Orientation="Horizontal"
-                HorizontalAlignment="Right">
+                HorizontalAlignment="Right"
+                Margin="0,16,0,0">
       <Button Content="Cancel"
               Style="{StaticResource SecondaryButton}"
               Click="OnCancelClick"

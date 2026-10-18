@@ -73,13 +73,7 @@ public partial class UrlCookieBarViewModel : ViewModelBase, IDisposable
 
     public bool HasCookieProfiles => CookieProfiles.Count > 0;
 
-    public bool CanInspect => !IsInspecting && IsValidUrl(UrlInput);
-
-    partial void OnUrlInputChanged(string value)
-    {
-        OnPropertyChanged(nameof(CanInspect));
-        InspectCommand.NotifyCanExecuteChanged();
-    }
+    public bool CanInspect => !IsInspecting;
 
     partial void OnActiveCookieProfileChanged(CookieProfile? value)
     {
@@ -95,6 +89,22 @@ public partial class UrlCookieBarViewModel : ViewModelBase, IDisposable
     [RelayCommand(CanExecute = nameof(CanInspect))]
     private async Task InspectAsync()
     {
+        if (string.IsNullOrWhiteSpace(UrlInput))
+        {
+            const string message = "Paste a media URL into the box first, then click Inspect. The grey example text is only a hint and is not a real URL.";
+            InspectFailed?.Invoke(message);
+            _toast.ShowError("No URL", message);
+            return;
+        }
+
+        if (!IsValidUrl(UrlInput))
+        {
+            const string message = "That URL is not valid. Use an http:// or https:// link.";
+            InspectFailed?.Invoke(message);
+            _toast.ShowError("Invalid URL", message);
+            return;
+        }
+
         IsInspecting = true;
         try
         {

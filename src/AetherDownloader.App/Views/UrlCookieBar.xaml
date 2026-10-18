@@ -20,7 +20,7 @@
 
       <TextBox Grid.Column="1"
                Style="{StaticResource FluentTextBox}"
-               ui:ControlHelper.PlaceholderText="e.g. https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
+               ui:ControlHelper.PlaceholderText="e.g. https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4"
                Text="{Binding UrlInput, UpdateSourceTrigger=PropertyChanged}"/>
 
       <Button Grid.Column="2"

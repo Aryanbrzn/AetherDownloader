@@ -13,12 +13,25 @@ public sealed class FormatOptionDisplayConverter : IValueConverter
             return string.Empty;
         }
 
-        var resolution = string.IsNullOrWhiteSpace(format.Resolution) ? format.Note ?? format.GroupLabel ?? "—" : format.Resolution;
-        var size = format.FileSizeApproxBytes.HasValue
-            ? FormatBytes(format.FileSizeApproxBytes.Value)
-            : "—";
+        var label = !string.IsNullOrWhiteSpace(format.Resolution)
+            ? format.Resolution
+            : !string.IsNullOrWhiteSpace(format.Note)
+                ? format.Note
+                : format.GroupLabel ?? "—";
 
-        return $"{resolution} · {format.Extension} · ~{size}";
+        var parts = new List<string> { label };
+
+        if (!string.IsNullOrWhiteSpace(format.Extension) && format.Extension is not "unknown")
+        {
+            parts.Add(format.Extension);
+        }
+
+        if (format.FileSizeApproxBytes is long bytes and > 0)
+        {
+            parts.Add($"~{FormatBytes(bytes)}");
+        }
+
+        return string.Join(" · ", parts);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>

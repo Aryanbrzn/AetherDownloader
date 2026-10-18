@@ -45,11 +45,26 @@ public partial class App : Application
             var toastService = _host.Services.GetRequiredService<ToastNotificationService>();
             var mainWindow = _host.Services.GetRequiredService<MainWindow>();
             toastService.Attach(mainWindow);
+            MainWindow = mainWindow;
             mainWindow.Show();
+            mainWindow.Activate();
         }
         catch (Exception ex)
         {
             Log.Fatal(ex, "Application startup failed");
+            try
+            {
+                MessageBox.Show(
+                    $"Startup failed:{Environment.NewLine}{ex.Message}",
+                    "AetherDownloader",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            catch
+            {
+                // Ignore secondary UI failures during crash reporting.
+            }
+
             Shutdown(1);
         }
     }
