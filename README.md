@@ -1,5 +1,9 @@
 # AetherDownloader — Windows GUI for yt-dlp
 
+<p align="center">
+  <img src="assets/aetherdownloader-banner.jpg" alt="AetherDownloader — Windows GUI for yt-dlp" width="100%">
+</p>
+
 **AetherDownloader** is a free, open-source **Windows desktop GUI for [yt-dlp](https://github.com/yt-dlp/yt-dlp)** with optional **[FFmpeg](https://ffmpeg.org/)** support. Paste a media URL, inspect available formats, pick a quality, and download to a folder on your PC — without using the command line.
 
 > Built for **personal archiving**, **education**, and **public-domain / Creative Commons** media.  
