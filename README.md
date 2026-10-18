@@ -78,8 +78,9 @@ The same text appears in the app under **About**.
 
 ## Download (end users)
 
-1. Open **[Releases](https://github.com/Aryanbrzn/AetherDownloader/releases)** and download the latest **win-x64** zip (self-contained).
-2. Extract the archive and run `AetherDownloader.App.exe`.
+1. Open **[Releases](https://github.com/Aryanbrzn/AetherDownloader/releases)**.
+2. Prefer the **`.msi`** installer (Start Menu shortcut + uninstall from Windows Settings).  
+   Or download the **`.zip`** portable build and run `AetherDownloader.App.exe`.
 3. If yt-dlp or FFmpeg is missing, confirm the in-app download prompt, or open **Settings → Download missing tools**.
 4. Try a freely licensed sample, for example:  
    [Big Buck Bunny (Internet Archive)](https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4) → **Inspect** → **Download**.
@@ -87,7 +88,7 @@ The same text appears in the app under **About**.
 ### Requirements (running a release)
 
 - Windows 10 or 11 (64-bit)  
-- No separate .NET install for the self-contained zip  
+- No separate .NET install (self-contained win-x64 builds)  
 - [Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) (usually already installed)  
 - **yt-dlp** and **FFmpeg** — not inside the Git repo; the app can install official builds into `%LOCALAPPDATA%\AetherDownloader\tools`
 
@@ -107,10 +108,27 @@ dotnet run --project src/AetherDownloader.App/AetherDownloader.App.csproj -c Rel
 dotnet test AetherDownloader.sln
 ```
 
-Publish a folder you can zip for Releases (do **not** commit `publish/`):
+### Pack zip + MSI locally
+
+Requires the [WiX](https://wixtoolset.org/) .NET tool (installed automatically by the script if missing):
 
 ```powershell
-dotnet publish src/AetherDownloader.App/AetherDownloader.App.csproj -c Release -o ./publish
+.\scripts\pack-release.ps1 -Version 1.0.1
+```
+
+Outputs under `artifacts/` (gitignored):
+
+- `AetherDownloader-v1.0.1-win-x64.zip`
+- `AetherDownloader-v1.0.1-win-x64.msi`
+
+### Automated releases (GitHub Actions)
+
+- **CI** (`.github/workflows/ci.yml`) — build + test on every push/PR  
+- **Release** (`.github/workflows/release.yml`) — on tag `v*` publishes zip + MSI to GitHub Releases  
+
+```powershell
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
 Optional local yt-dlp for tests: see [`tools/yt-dlp/README.md`](tools/yt-dlp/README.md) (binaries are gitignored).

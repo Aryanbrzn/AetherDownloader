@@ -18,6 +18,10 @@ packages/
 dist/
 build/
 publish/
+*.msi
+*.wixpdb
+AetherDownloader-v*.zip
+installer/.wix/
 [Bb]in/
 [Oo]bj/
 
@@ -75,4 +79,3 @@ __pycache__/
 Thumbs.db
 Desktop.ini
 .DS_Store
-AetherDownloader-v1.0.0-win-x64.zip
